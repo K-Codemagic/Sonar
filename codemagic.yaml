@@ -5,8 +5,8 @@ workflows:
       groups:
         - appstore_credentials
       vars:
-        XCODE_WORKSPACE: "My First iOS App.xcodeproj"  # PUT YOUR WORKSPACE NAME HERE
-        XCODE_SCHEME: "My First iOS App" # PUT THE NAME OF YOUR SCHEME HERE
+        XCODE_WORKSPACE: "Sonar.xcodeproj"  # PUT YOUR WORKSPACE NAME HERE
+        XCODE_SCHEME: "Sonar" # PUT THE NAME OF YOUR SCHEME HERE
       xcode: latest
       cocoapods: default
     scripts:
