@@ -47,7 +47,7 @@ workflows:
         script: |
             export PATH=$PATH:$FCI_BUILD_DIR/sonar-scanner/bin
             sonar-scanner \
-            -Dsonar.projectKey=Swift-Sonar \
+            -Dsonar.projectKey=Sonar-Swift \
             -Dsonar.host.url=https://1a51-2405-201-200f-7d67-d0ba-3977-760c-c168.ngrok.io \
     artifacts:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
