@@ -16,7 +16,7 @@ workflows:
           -project "$XCODE_WORKSPACE" \
           -scheme "$XCODE_SCHEME" \
           -sdk iphonesimulator \
-          -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.1' \
+          -destination 'platform=iOS Simulator,name=iPhone 12,OS=15.2' \
           clean build test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
       - name: Build debug app
         script: |
@@ -35,7 +35,7 @@ workflows:
             -project "$XCODE_WORKSPACE" \
             -scheme "$XCODE_SCHEME" \
             -sdk iphonesimulator \
-            -destination 'platform=iOS Simulator,name=iPhone 11 Pro,OS=14.0' \
+            -destination 'platform=iOS Simulator,name=iPhone 11 Pro,OS=15.2' \
             -derivedDataPath Build/ \
             -enableCodeCoverage YES \
             clean build test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
