@@ -4,33 +4,57 @@ workflows:
     environment:
       groups:
         - appstore_credentials
+        - sonar
       vars:
         XCODE_WORKSPACE: "Sonar.xcodeproj"  # PUT YOUR WORKSPACE NAME HERE
         XCODE_SCHEME: "Sonar" # PUT THE NAME OF YOUR SCHEME HERE
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Set up keychain to be used for code signing using Codemagic CLI 'keychain' command
+      - name: Run tests
         script: |
-                    keychain initialize
-      - name: Fetch signing files
+          xcodebuild \
+          -project "$XCODE_WORKSPACE" \
+          -scheme "$XCODE_SCHEME" \
+          -sdk iphonesimulator \
+          -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.1' \
+          clean build test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+      - name: Build debug app
         script: |
-                    app-store-connect fetch-signing-files $(xcode-project detect-bundle-id) --type IOS_APP_STORE --create
-      - name: Add certificates to keychain
+          xcodebuild build -project "$XCODE_PROJECT" \
+          -scheme "$XCODE_SCHEME" \
+          CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+      - name: Sonar
         script: |
-                    keychain add-certificates 
-      - name: Increment build number
-        script: agvtool new-version -all $(($BUILD_NUMBER +1))
-      - name: Set up code signing settings on Xcode project
-        script: xcode-project use-profiles
-      - name: Build ipa for distribution
-        script: xcode-project build-ipa --project "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+            # download and install the SonarScanner
+            wget -O $FCI_BUILD_DIR/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.4.0.2170-macosx.zip
+            unzip $FCI_BUILD_DIR/sonar-scanner.zip
+            mv sonar-scanner-* sonar-scanner
+     - name: Coverage tests
+       script: |
+            xcodebuild \
+            -project "$XCODE_WORKSPACE" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 11 Pro,OS=14.0' \
+            -derivedDataPath Build/ \
+            -enableCodeCoverage YES \
+            clean build test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+     - name: convert coverage report to sonarqube format
+       script: |
+            bash xccov-to-sonarqube-generic.sh Build/Logs/Test/*.xcresult/ > sonarqube-generic-coverage.xml
+      - name: Generate and upload code analysis report
+        script: |
+            export PATH=$PATH:$FCI_BUILD_DIR/sonar-scanner/bin
+            sonar-scanner \
+            -Dsonar.projectKey=Swift-Sonar \
+            -Dsonar.host.url=https://1a51-2405-201-200f-7d67-d0ba-3977-760c-c168.ngrok.io \
     artifacts:
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
-      app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY      # Contents of the API key
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER    # Alphanumeric value that identifies the API key
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID   
+      email:
+        recipients:
+            - kalgi@nevercode.io
