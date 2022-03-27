@@ -3,7 +3,6 @@ workflows:
     name: ios_workflow
     environment:
       groups:
-        - appstore_credentials
         - sonar
       vars:
         XCODE_WORKSPACE: "Sonar.xcodeproj"  # PUT YOUR WORKSPACE NAME HERE
