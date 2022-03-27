@@ -49,6 +49,8 @@ workflows:
             sonar-scanner \
             -Dsonar.projectKey=Sonar-Swift \
             -Dsonar.host.url=https://1a51-2405-201-200f-7d67-d0ba-3977-760c-c168.ngrok.io \
+            -Dsonar.cfamily.build-wrapper-output.bypass=true \
+            -Dsonar.coverageReportPaths=sonarqube-generic-coverage.xml \
     artifacts:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - build/ios/ipa/*.ipa
