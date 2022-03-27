@@ -1,6 +1,6 @@
 workflows:
   ios-workflow:
-    name: ios_workflow
+  name: ios_workflow
     environment:
       groups:
         - appstore_credentials
