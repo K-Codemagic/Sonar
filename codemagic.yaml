@@ -30,8 +30,8 @@ workflows:
             wget -O $FCI_BUILD_DIR/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.4.0.2170-macosx.zip
             unzip $FCI_BUILD_DIR/sonar-scanner.zip
             mv sonar-scanner-* sonar-scanner
-     - name: Coverage tests
-       script: |
+      - name: Coverage tests
+        script: |
             xcodebuild \
             -project "$XCODE_WORKSPACE" \
             -scheme "$XCODE_SCHEME" \
@@ -40,8 +40,8 @@ workflows:
             -derivedDataPath Build/ \
             -enableCodeCoverage YES \
             clean build test CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-     - name: convert coverage report to sonarqube format
-       script: |
+      - name: convert coverage report to sonarqube format
+        script: |
             bash xccov-to-sonarqube-generic.sh Build/Logs/Test/*.xcresult/ > sonarqube-generic-coverage.xml
       - name: Generate and upload code analysis report
         script: |
