@@ -47,7 +47,7 @@ workflows:
         script: |
             export PATH=$PATH:$FCI_BUILD_DIR/sonar-scanner/bin
             sonar-scanner \
-            -Dsonar.projectKey=Sonar-Swift \
+            -Dsonar.projectKey=Sonar \
             -Dsonar.host.url=http://18.237.244.64:9000/ \
             -Dsonar.c.file.suffixes=- \
             -Dsonar.cpp.file.suffixes=- \
