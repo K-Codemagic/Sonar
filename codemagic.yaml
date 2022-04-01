@@ -49,9 +49,9 @@ workflows:
             sonar-scanner \
             -Dsonar.projectKey=Sonar-Swift \
             -Dsonar.host.url=http://18.237.244.64:9000/ \
-            -Dsonar.c.file.suffixes=-
-            -Dsonar.cpp.file.suffixes=-
-            -Dsonar.objc.file.suffixes=-
+            -Dsonar.c.file.suffixes=- \
+            -Dsonar.cpp.file.suffixes=- \ 
+            -Dsonar.objc.file.suffixes=- \
             -Dsonar.coverageReportPaths=sonarqube-generic-coverage.xml \
     artifacts:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
