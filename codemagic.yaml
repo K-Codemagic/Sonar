@@ -13,6 +13,14 @@ workflows:
         XCODE_SCHEME: "Sonar" # PUT THE NAME OF YOUR SCHEME HERE
       xcode: latest
       cocoapods: default
+    triggering:
+      events:
+        - push
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
     scripts:
       - name: Run tests
         script: |
